@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindGrid – شبكة العقول</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#00bcd4">
+<style>
+:root {
+  --primary: #00bcd4;
+  --bg-light: #ffffff;
+  --bg-dark: #000000;
+  --text-light: #ffffff;
+  --text-dark: #000000;
+}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg-light);
+  color: var(--text-dark);
+}
+@media (prefers-color-scheme: dark) {
+  body { background: var(--bg-dark); color: var(--text-light); }
+}
+header {
+  background: var(--primary);
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+main { padding: 20px; }
+button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.screen { display: none; }
+.active { display: block; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 40px);
+  gap: 5px;
+  justify-content: center;
+  margin-top: 15px;
+}
+.cell {
+  width: 40px;
+  height: 40px;
+  background: white;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.black { background: black; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>MindGrid – شبكة العقول</h1>
+</header>
+
+<main>
+  <section id="userScreen" class="screen active">
+    <h2>اختر مستخدم</h2>
+    <div id="userList"></div>
+    <button onclick="showAddUser()">إضافة مستخدم</button>
+  </section>
+
+  <section id="addUserScreen" class="screen">
+    <h2>إضافة مستخدم جديد</h2>
+    <input type="text" id="name" placeholder="الاسم"><br>
+    <input type="text" id="location" placeholder="الموقع"><br>
+    <input type="number" id="age" placeholder="العمر"><br>
+    <button onclick="saveUser()">حفظ</button>
+  </section>
+
+  <section id="topicsScreen" class="screen">
+    <h2>اختر المجالات المفضلة</h2>
+    <div id="topics">
+      <label><input type="checkbox" value="ذكاء"> ألغاز ذكاء</label><br>
+      <label><input type="checkbox" value="ثقافة"> ثقافة عامة</label><br>
+      <label><input type="checkbox" value="أدب"> أدب</label><br>
+      <label><input type="checkbox" value="رياضة"> رياضة</label><br>
+      <label><input type="checkbox" value="علوم"> علوم</label><br>
+      <label><input type="checkbox" value="فن"> فن</label><br>
+    </div>
+    <button onclick="nextToDifficulty()">التالي</button>
+  </section>
+
+  <section id="difficultyScreen" class="screen">
+    <h2>اختر مستوى الصعوبة</h2>
+    <select id="difficulty">
+      <option value="سهل">سهل</option>
+      <option value="متوسط">متوسط</option>
+      <option value="صعب">صعب</option>
+    </select><br>
+    <button onclick="nextToGames()">التالي</button>
+  </section>
+
+  <section id="gamesScreen" class="screen">
+    <h2>اختر اللعبة</h2>
+    <button onclick="startCrossword()">🧩 كلمات متقاطعة</button>
+    <button>🧠 ألغاز منطقية</button>
+    <button>🔍 كلمة السر</button>
+    <button>🔤 ترتيب الحروف</button>
+    <button>⏱️ تحدي السرعة</button>
+    <button>📚 اختبار المعلومات</button>
+    <button>🖼️ تحدي الصور</button>
+  </section>
+
+  <section id="crosswordScreen" class="screen">
+    <h2>كلمات متقاطعة</h2>
+    <div class="grid">
+      <div class="cell">ب</div>
+      <div class="cell">غ</div>
+      <div class="cell">د</div>
+      <div class="cell">ا</div>
+      <div class="cell">د</div>
+      <div class="cell black"></div>
+      <div class="cell black"></div>
+    </div>
+    <button onclick="backToGames()">عودة للقائمة</button>
+  </section>
+</main>
+
+<script>
+let users = [];
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showAddUser() { showScreen('addUserScreen'); }
+
+function saveUser() {
+  let user = {
+    name: document.getElementById('name').value,
+    location: document.getElementById('location').value,
+    age: document.getElementById('age').value
+  };
+  users.push(user);
+  showTopics();
+}
+
+function showTopics() { showScreen('topicsScreen'); }
+
+function nextToDifficulty() { showScreen('difficultyScreen'); }
+
+function nextToGames() { showScreen('gamesScreen'); }
+
+function startCrossword() { showScreen('crosswordScreen'); }
+
+function backToGames() { showScreen('gamesScreen'); }
+</script>
+
+</body>
+</html>
