@@ -43,7 +43,7 @@ button {
 .active { display: block; }
 .grid {
   display: grid;
-  grid-template-columns: repeat(7, 40px);
+  grid-template-columns: repeat(auto-fit, 40px);
   gap: 5px;
   justify-content: center;
   margin-top: 15px;
@@ -116,22 +116,19 @@ button {
   </section>
 
   <section id="crosswordScreen" class="screen">
-    <h2>كلمات متقاطعة</h2>
-    <div class="grid">
-      <div class="cell">ب</div>
-      <div class="cell">غ</div>
-      <div class="cell">د</div>
-      <div class="cell">ا</div>
-      <div class="cell">د</div>
-      <div class="cell black"></div>
-      <div class="cell black"></div>
-    </div>
+    <h2 id="cw-question">كلمات متقاطعة</h2>
+    <div class="grid"></div>
     <button onclick="backToGames()">عودة للقائمة</button>
   </section>
 </main>
 
 <script>
 let users = [];
+let puzzles = {};
+
+fetch('puzzles.json')
+  .then(res => res.json())
+  .then(data => { puzzles = data; });
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -156,7 +153,16 @@ function nextToDifficulty() { showScreen('difficultyScreen'); }
 
 function nextToGames() { showScreen('gamesScreen'); }
 
-function startCrossword() { showScreen('crosswordScreen'); }
+function startCrossword() { 
+  let cw = puzzles.crossword[0]; 
+  document.getElementById('cw-question').textContent = cw.question;
+  let gridHTML = '';
+  for (let i = 0; i < cw.answer.length; i++) {
+    gridHTML += `<div class="cell"></div>`;
+  }
+  document.querySelector('#crosswordScreen .grid').innerHTML = gridHTML;
+  showScreen('crosswordScreen'); 
+}
 
 function backToGames() { showScreen('gamesScreen'); }
 
