@@ -159,6 +159,11 @@ function nextToGames() { showScreen('gamesScreen'); }
 function startCrossword() { showScreen('crosswordScreen'); }
 
 function backToGames() { showScreen('gamesScreen'); }
+
+// تسجيل الـ Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
 </script>
 
 </body>
