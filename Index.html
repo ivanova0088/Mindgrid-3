@@ -57,6 +57,21 @@ button {
   justify-content: center;
   align-items: center;
 }
+.cell input{
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  text-align: center;
+  font-weight: 700;
+  font-size: 18px;
+  color: black;
+  outline: none;
+}
+@media (prefers-color-scheme: dark){
+  .cell { background: #111; }
+  .cell input { color: #fff; }
+}
 .black { background: black; }
 </style>
 </head>
@@ -98,7 +113,7 @@ button {
     <h2>اختر مستوى الصعوبة</h2>
     <select id="difficulty">
       <option value="سهل">سهل</option>
-      <option value="متوسط">متوسط</option>
+      <option value="متوسط" selected>متوسط</option>
       <option value="صعب">صعب</option>
     </select><br>
     <button onclick="nextToGames()">التالي</button>
@@ -118,7 +133,9 @@ button {
   <section id="crosswordScreen" class="screen">
     <h2 id="cw-question">كلمات متقاطعة</h2>
     <div class="grid"></div>
-    <button onclick="backToGames()">عودة للقائمة</button>
+    <div style="text-align:center;margin-top:10px;">
+      <button onclick="backToGames()">عودة للقائمة</button>
+    </div>
   </section>
 </main>
 
@@ -148,25 +165,56 @@ function saveUser() {
 }
 
 function showTopics() { showScreen('topicsScreen'); }
-
 function nextToDifficulty() { showScreen('difficultyScreen'); }
-
 function nextToGames() { showScreen('gamesScreen'); }
 
-function startCrossword() { 
-  let cw = puzzles.crossword[0]; 
+function startCrossword() {
+  const cw = puzzles.crossword && puzzles.crossword[0];
+  if(!cw){ alert('لا توجد بيانات crossword في puzzles.json'); return; }
+
   document.getElementById('cw-question').textContent = cw.question;
-  let gridHTML = '';
-  for (let i = 0; i < cw.answer.length; i++) {
-    gridHTML += `<div class="cell"></div>`;
+
+  const gridEl = document.querySelector('#crosswordScreen .grid');
+  gridEl.innerHTML = '';
+
+  for(let i=0; i<cw.answer.length; i++){
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    const input = document.createElement('input');
+    input.maxLength = 1;
+    input.inputMode = 'text';
+    input.autocapitalize = 'none';
+    input.autocomplete = 'off';
+    input.spellcheck = false;
+
+    input.addEventListener('input', (e)=>{
+      e.target.value = e.target.value.replace(/\s/g,'');
+      if(e.target.value && e.target.parentElement.nextElementSibling){
+        const nextInput = e.target.parentElement.nextElementSibling.querySelector('input');
+        if(nextInput) nextInput.focus();
+      }
+    });
+
+    input.addEventListener('keydown', (e)=>{
+      if(e.key === 'Backspace' && !e.target.value){
+        const prev = e.target.parentElement.previousElementSibling;
+        if(prev){
+          const prevInput = prev.querySelector('input');
+          if(prevInput){ prevInput.focus(); prevInput.value=''; }
+        }
+      }
+    });
+
+    cell.appendChild(input);
+    gridEl.appendChild(cell);
   }
-  document.querySelector('#crosswordScreen .grid').innerHTML = gridHTML;
-  showScreen('crosswordScreen'); 
+
+  showScreen('crosswordScreen');
 }
 
 function backToGames() { showScreen('gamesScreen'); }
 
-// تسجيل الـ Service Worker
+// Service Worker
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
