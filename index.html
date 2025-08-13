@@ -10,216 +10,314 @@
 <style>
 :root {
   --primary: #00bcd4;
-  --bg-light: #ffffff;
-  --bg-dark: #000000;
-  --text-light: #ffffff;
-  --text-dark: #000000;
+  --ink: #0b0f14;
+  --bg1: #061018;
+  --bg2: #081a24;
+  --tile: rgba(255,255,255,.06);
+  --border: rgba(255,255,255,.12);
+  --white: #ffffff;
+  --black: #000000;
 }
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: var(--bg-light);
-  color: var(--text-dark);
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;font-family: system-ui, -apple-system, "Noto Sans Arabic", Arial, sans-serif;color:#eaf6fb;
+  background: radial-gradient(1200px 700px at 10% 10%, #0a2430, transparent 60%),
+              radial-gradient(900px 700px at 90% 20%, #042b36, transparent 55%),
+              linear-gradient(135deg, var(--bg1), var(--bg2));
+  background-attachment: fixed;
+  animation: hue 20s linear infinite; 
 }
-@media (prefers-color-scheme: dark) {
-  body { background: var(--bg-dark); color: var(--text-light); }
+@keyframes hue { from{filter:hue-rotate(0deg)} to{filter:hue-rotate(10deg)} }
+
+header{
+  position:sticky;top:0;z-index:5;
+  background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,0));
+  backdrop-filter: blur(6px);
+  padding:14px 16px; display:flex; align-items:center; gap:12px;
+  border-bottom: 1px solid var(--border);
 }
-header {
-  background: var(--primary);
-  color: white;
-  padding: 10px;
-  text-align: center;
+.logo{width:36px;height:36px;border-radius:10px;background:#0fd0e6;display:grid;place-items:center;color:#00151a;font-weight:900}
+h1{margin:0;font-size:18px}
+main{padding:18px;max-width:1100px;margin:auto}
+
+.card{
+  border:1px solid var(--border);
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border-radius:16px; padding:16px; box-shadow: 0 8px 24px rgba(0,0,0,.25);
 }
-main { padding: 20px; }
-button {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  margin: 5px;
-  border-radius: 5px;
-  cursor: pointer;
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:720px){ .grid-3,.grid-4{grid-template-columns:1fr 1fr} }
+
+button,.btn,select,input{
+  border-radius:12px;border:1px solid var(--border);background:var(--tile);color:#eaf6fb;
+  padding:10px 14px;outline:none
 }
-.screen { display: none; }
-.active { display: block; }
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 40px);
-  gap: 5px;
-  justify-content: center;
-  margin-top: 15px;
+button,.btn{cursor:pointer}
+.btn-primary{background:linear-gradient(180deg,#12d8f3,#06b6d4); color:#00232b; font-weight:800; border:none}
+.btn-ghost{background:transparent}
+.section-title{margin:0 0 10px 0;font-size:18px}
+
+.screen{display:none}
+.active{display:block}
+
+/* Topics pills */
+.pills{display:flex;flex-wrap:wrap;gap:10px}
+.pill{
+  padding:10px 12px;border-radius:999px;border:1px solid var(--border);
+  background:rgba(255,255,255,.05);cursor:pointer;user-select:none
 }
-.cell {
-  width: 40px;
-  height: 40px;
-  background: white;
-  color: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.pill.active{background:linear-gradient(180deg,#12d8f3,#06b6d4); color:#00232b; border:none; font-weight:800}
+
+/* Crossword 9x9 */
+.cw-wrap{padding:14px}
+.cw-grid{
+  display:grid; grid-template-columns: repeat(9, 44px); gap:6px; justify-content:center;
 }
-.cell input{
-  width: 100%;
-  height: 100%;
-  border: none;
-  background: transparent;
-  text-align: center;
-  font-weight: 700;
-  font-size: 18px;
-  color: black;
-  outline: none;
+.cw-cell{
+  width:44px;height:44px;border-radius:8px;background:rgba(255,255,255,.08);
+  border:2px solid rgba(255,255,255,.2); box-shadow: inset 0 2px 0 rgba(255,255,255,.06);
+  display:grid;place-items:center;
 }
-@media (prefers-color-scheme: dark){
-  .cell { background: #111; }
-  .cell input { color: #fff; }
+.cw-input{
+  width:100%;height:100%;background:transparent;border:none;color:#eaf6fb;
+  text-align:center;font-weight:800;font-size:18px;outline:none;
 }
-.black { background: black; }
+.cw-input:focus{
+  box-shadow: 0 0 0 3px rgba(0,188,212,.35) inset, 0 0 0 2px #00bcd4; border-radius:8px;
+}
+.cw-black{background:#00151a;border-color:#00151a}
+
+/* Forms */
+label{font-size:13px;opacity:.9}
+.input, .select{width:100%}
+.help{opacity:.8;font-size:12px}
+hr.sep{border:0;border-top:1px solid var(--border);margin:16px 0}
 </style>
 </head>
 <body>
-
 <header>
+  <div class="logo">MG</div>
   <h1>MindGrid – شبكة العقول</h1>
 </header>
 
 <main>
+  <!-- Users -->
   <section id="userScreen" class="screen active">
-    <h2>اختر مستخدم</h2>
-    <div id="userList"></div>
-    <button onclick="showAddUser()">إضافة مستخدم</button>
-  </section>
-
-  <section id="addUserScreen" class="screen">
-    <h2>إضافة مستخدم جديد</h2>
-    <input type="text" id="name" placeholder="الاسم"><br>
-    <input type="text" id="location" placeholder="الموقع"><br>
-    <input type="number" id="age" placeholder="العمر"><br>
-    <button onclick="saveUser()">حفظ</button>
-  </section>
-
-  <section id="topicsScreen" class="screen">
-    <h2>اختر المجالات المفضلة</h2>
-    <div id="topics">
-      <label><input type="checkbox" value="ذكاء"> ألغاز ذكاء</label><br>
-      <label><input type="checkbox" value="ثقافة"> ثقافة عامة</label><br>
-      <label><input type="checkbox" value="أدب"> أدب</label><br>
-      <label><input type="checkbox" value="رياضة"> رياضة</label><br>
-      <label><input type="checkbox" value="علوم"> علوم</label><br>
-      <label><input type="checkbox" value="فن"> فن</label><br>
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <h2 class="section-title">اختر مستخدمًا أو أضف حسابًا جديدًا</h2>
+        <button class="btn-primary" onclick="showAddUser()">إضافة مستخدم</button>
+      </div>
+      <div id="userList" class="grid-3"></div>
     </div>
-    <button onclick="nextToDifficulty()">التالي</button>
   </section>
 
-  <section id="difficultyScreen" class="screen">
-    <h2>اختر مستوى الصعوبة</h2>
-    <select id="difficulty">
-      <option value="سهل">سهل</option>
-      <option value="متوسط" selected>متوسط</option>
-      <option value="صعب">صعب</option>
-    </select><br>
-    <button onclick="nextToGames()">التالي</button>
+  <!-- Add User (onboarding) -->
+  <section id="addUserScreen" class="screen">
+    <div class="card">
+      <h2 class="section-title">مستخدم جديد</h2>
+      <div class="grid-2">
+        <div>
+          <label>الاسم</label>
+          <input class="input" type="text" id="name" placeholder="اكتب اسمك">
+        </div>
+        <div>
+          <label>الدولة</label>
+          <input class="input" id="countryInput" list="countryList" placeholder="اختر الدولة">
+          <datalist id="countryList"></datalist>
+        </div>
+        <div>
+          <label>تاريخ الميلاد</label>
+          <input class="input" type="date" id="dob">
+          <div class="help">نحسب العمر تلقائيًا من تاريخ الميلاد لضبط حجم الخط.</div>
+        </div>
+        <div>
+          <label>مستوى الصعوبة</label>
+          <select id="difficulty" class="select">
+            <option value="سهل">سهل</option>
+            <option value="متوسط">متوسط</option>
+            <option value="صعب" selected>صعب</option>
+          </select>
+        </div>
+      </div>
+
+      <hr class="sep">
+
+      <h3 class="section-title">المجالات المفضلة</h3>
+      <div id="topics" class="pills">
+        <!-- سيتم توليدها برمجيًا -->
+      </div>
+
+      <div class="row" style="margin-top:14px;justify-content:flex-end">
+        <button class="btn" onclick="showScreen('userScreen')">إلغاء</button>
+        <button class="btn-primary" onclick="saveUser()">حفظ</button>
+      </div>
+    </div>
   </section>
 
+  <!-- Games menu -->
   <section id="gamesScreen" class="screen">
-    <h2>اختر اللعبة</h2>
-    <button onclick="startCrossword()">🧩 كلمات متقاطعة</button>
-    <button>🧠 ألغاز منطقية</button>
-    <button>🔍 كلمة السر</button>
-    <button>🔤 ترتيب الحروف</button>
-    <button>⏱️ تحدي السرعة</button>
-    <button>📚 اختبار المعلومات</button>
-    <button>🖼️ تحدي الصور</button>
+    <div class="card">
+      <h2 class="section-title">اختر اللعبة</h2>
+      <div class="grid-3">
+        <button class="btn-primary" onclick="startCrossword()">🧩 كلمات متقاطعة</button>
+        <button class="btn">🧠 ألغاز منطقية</button>
+        <button class="btn">🔍 كلمة السر</button>
+        <button class="btn">🔤 ترتيب الحروف</button>
+        <button class="btn">⏱️ تحدي السرعة</button>
+        <button class="btn">📚 اختبار المعلومات</button>
+        <button class="btn">🖼️ تحدي الصور</button>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn" onclick="showScreen('userScreen')">تبديل المستخدم</button>
+      </div>
+    </div>
   </section>
 
+  <!-- Crossword 9x9 -->
   <section id="crosswordScreen" class="screen">
-    <h2 id="cw-question">كلمات متقاطعة</h2>
-    <div class="grid"></div>
-    <div style="text-align:center;margin-top:10px;">
-      <button onclick="backToGames()">عودة للقائمة</button>
+    <div class="card">
+      <h2 class="section-title" id="cw-question">كلمات متقاطعة (9×9)</h2>
+      <div class="cw-wrap">
+        <div class="cw-grid" id="cwGrid"></div>
+      </div>
+      <div class="row" style="justify-content:center">
+        <button class="btn" onclick="backToGames()">عودة للقائمة</button>
+      </div>
     </div>
   </section>
 </main>
 
 <script>
-let users = [];
+let users = JSON.parse(localStorage.getItem('mg_users')||'[]');
 let puzzles = {};
+let countries = [];
 
-fetch('puzzles.json')
-  .then(res => res.json())
-  .then(data => { puzzles = data; });
+const ALL_TOPICS = [
+  "ألغاز ذكاء","ثقافة عامة","تاريخ","جغرافيا","علوم","تكنولوجيا",
+  "رياضة","فن","موسيقى","أدب","أفلام ومسلسلات","أعمال","طعام","سفر","طبيعة"
+];
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+// ===== UI helpers =====
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-
-function showAddUser() { showScreen('addUserScreen'); }
-
-function saveUser() {
-  let user = {
-    name: document.getElementById('name').value,
-    location: document.getElementById('location').value,
-    age: document.getElementById('age').value
-  };
-  users.push(user);
-  showTopics();
+function renderUsers(){
+  const box = document.getElementById('userList');
+  box.innerHTML = users.map(u => `
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-weight:800">${u.name||"بدون اسم"}</div>
+          <div style="opacity:.8;font-size:12px">${u.country||"—"} • ${u.age? (u.age+" سنة"):"—"}</div>
+        </div>
+        <div class="row">
+          <button class="btn-primary" onclick="enterAs('${u.id}')">دخول</button>
+          <button class="btn" onclick="deleteUser('${u.id}')">حذف</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+function enterAs(id){
+  localStorage.setItem('mg_active', id);
+  showScreen('gamesScreen');
 }
 
-function showTopics() { showScreen('topicsScreen'); }
-function nextToDifficulty() { showScreen('difficultyScreen'); }
-function nextToGames() { showScreen('gamesScreen'); }
+function deleteUser(id){
+  users = users.filter(u=>u.id!==id);
+  localStorage.setItem('mg_users', JSON.stringify(users));
+  renderUsers();
+}
 
-function startCrossword() {
-  const cw = puzzles.crossword && puzzles.crossword[0];
-  if(!cw){ alert('لا توجد بيانات crossword في puzzles.json'); return; }
+function uid(){ return 'u_'+Math.random().toString(36).slice(2,9); }
 
-  document.getElementById('cw-question').textContent = cw.question;
+// ===== Onboarding =====
+function showAddUser(){
+  buildTopics();
+  showScreen('addUserScreen');
+}
 
-  const gridEl = document.querySelector('#crosswordScreen .grid');
-  gridEl.innerHTML = '';
+function buildTopics(){
+  const host = document.getElementById('topics'); host.innerHTML='';
+  ALL_TOPICS.forEach(t=>{
+    const b = document.createElement('div');
+    b.className = 'pill'; b.textContent = t;
+    b.onclick = ()=> b.classList.toggle('active');
+    host.appendChild(b);
+  });
+}
 
-  for(let i=0; i<cw.answer.length; i++){
-    const cell = document.createElement('div');
-    cell.className = 'cell';
-    const input = document.createElement('input');
-    input.maxLength = 1;
-    input.inputMode = 'text';
-    input.autocapitalize = 'none';
-    input.autocomplete = 'off';
-    input.spellcheck = false;
+function computeAge(dobStr){
+  if(!dobStr) return 0;
+  const d = new Date(dobStr); const now = new Date();
+  let age = now.getFullYear()-d.getFullYear();
+  const m = now.getMonth()-d.getMonth();
+  if(m<0 || (m===0 && now.getDate()<d.getDate())) age--;
+  return Math.max(0, age);
+}
 
+function saveUser(){
+  const name = document.getElementById('name').value.trim();
+  const country = document.getElementById('countryInput').value.trim();
+  const dob = document.getElementById('dob').value;
+  const age = computeAge(dob);
+  const difficulty = document.getElementById('difficulty').value;
+  const topics = Array.from(document.querySelectorAll('#topics .pill.active')).map(x=>x.textContent);
+
+  const u = { id: uid(), name, country, dob, age, difficulty, topics, coins:0, streak:0 };
+  users.push(u);
+  localStorage.setItem('mg_users', JSON.stringify(users));
+  renderUsers();
+  showScreen('userScreen');
+}
+
+// ===== Crossword 9x9 =====
+function startCrossword(){
+  const q = puzzles.crossword && puzzles.crossword[0];
+  document.getElementById('cw-question').textContent = q ? q.question : "كلمات متقاطعة (9×9)";
+  const grid = document.getElementById('cwGrid');
+  grid.innerHTML = '';
+  for(let i=0;i<81;i++){
+    const cell = document.createElement('div'); cell.className='cw-cell';
+    const input = document.createElement('input'); input.className='cw-input'; input.maxLength=1;
+    input.autocapitalize='none'; input.autocomplete='off'; input.spellcheck=false; input.inputMode='text';
     input.addEventListener('input', (e)=>{
       e.target.value = e.target.value.replace(/\s/g,'');
-      if(e.target.value && e.target.parentElement.nextElementSibling){
-        const nextInput = e.target.parentElement.nextElementSibling.querySelector('input');
-        if(nextInput) nextInput.focus();
-      }
+      const next = e.target.parentElement.nextElementSibling;
+      if(e.target.value && next){ const ni = next.querySelector('input'); if(ni) ni.focus(); }
     });
-
     input.addEventListener('keydown', (e)=>{
-      if(e.key === 'Backspace' && !e.target.value){
+      if(e.key==='Backspace' && !e.target.value){
         const prev = e.target.parentElement.previousElementSibling;
-        if(prev){
-          const prevInput = prev.querySelector('input');
-          if(prevInput){ prevInput.focus(); prevInput.value=''; }
-        }
+        if(prev){ const pi = prev.querySelector('input'); if(pi){ pi.focus(); pi.value=''; } }
       }
     });
-
-    cell.appendChild(input);
-    gridEl.appendChild(cell);
+    cell.appendChild(input); grid.appendChild(cell);
   }
-
   showScreen('crosswordScreen');
 }
 
-function backToGames() { showScreen('gamesScreen'); }
+function backToGames(){ showScreen('gamesScreen'); }
+
+// ===== Data loading =====
+fetch('puzzles.json').then(r=>r.json()).then(d=>{ puzzles=d||{}; });
+fetch('countries.json').then(r=>r.json()).then(list=>{
+  countries = list||[];
+  const dl = document.getElementById('countryList');
+  dl.innerHTML = countries.map(c=>`<option value="${c}">`).join('');
+});
+
+// ===== boot =====
+renderUsers();
 
 // Service Worker
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
-}
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
 </script>
-
 </body>
 </html>
