@@ -1,71 +1,25 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MindGrid – شبكة العقول</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#00bcd4">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<style>
-:root{
-  --primary:#00bcd4; --bg:#111; --fg:#f7f7f7;
-  --card:rgba(255,255,255,.06); --line:rgba(255,255,255,.12);
-  --muted:rgba(255,255,255,.7);
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,system-ui,"Noto Sans Arabic",Arial,sans-serif;background:linear-gradient(180deg,#0b1218,#0a0f14);color:var(--fg)}
-header{position:sticky;top:0;z-index:5;padding:14px 16px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.35);backdrop-filter:blur(6px);display:flex;gap:10px;align-items:center}
-.logo{width:36px;height:36px;border-radius:10px;background:#00bcd4;color:#00181e;display:grid;place-items:center;font-weight:900}
-h1{margin:0;font-size:18px}
-main{max-width:1100px;margin:auto;padding:18px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-@media(max-width:800px){.grid-2,.grid-3{grid-template-columns:1fr}}
-
-button,.btn,select,input,textarea{border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--fg);padding:10px 14px}
-button,.btn{cursor:pointer}
-.btn-primary{background:#00bcd4;color:#00232b;border:none;font-weight:800}
-.btn-ghost{background:transparent}
-.title{margin:0 0 10px 0;font-size:18px}
-.help{font-size:12px;color:var(--muted)}
-.screen{display:none}.active{display:block}
-
-/* حبوب المجالات */
-.pills{display:flex;flex-wrap:wrap;gap:10px}
-.pill{padding:10px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);cursor:pointer;user-select:none}
-.pill.active{background:#00bcd4;color:#00232b;border:none;font-weight:800}
-
-/* ——— الكلمات المتقاطعة: أبيض/أسود + ترقيم + قوائم أسئلة ——— */
-.cw-wrap{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
-.cw-grid{display:grid;grid-template-columns:repeat(9,42px);gap:6px;justify-content:center}
-.cw-cell{position:relative;width:42px;height:42px;border:2px solid #000;background:#fff;display:grid;place-items:center;border-radius:4px}
-.cw-input{width:100%;height:100%;border:none;background:transparent;text-align:center;font-weight:800;font-size:18px;color:#000;outline:none}
-.cw-input:focus{outline:2px solid #00bcd4;outline-offset:-2px}
-.cw-black{background:#000;border-color:#000}
-.cw-num{position:absolute;top:2px;right:3px;font-size:10px;color:#444}
-.cw-correct{background:#e8ffe8}
-.cw-wrong{background:#ffeaea}
-
-/* ألعاب أخرى */
-.game-card{padding:14px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.04)}
-.option{display:block;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin:6px 0;background:rgba(255,255,255,.04);cursor:pointer}
-.option.correct{background:#e8ffe8;color:#053}
-.option.wrong{background:#ffeaea;color:#500}
-.wordsearch{display:grid;grid-template-columns:repeat(8,36px);gap:6px;justify-content:center}
-.wcell{width:36px;height:36px;border:1px solid var(--line);display:grid;place-items:center;border-radius:6px;background:#fff;color:#000;font-weight:800}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MindGrid – شبكة العقول</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#00bcd4">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header><div class="logo">MG</div><h1>MindGrid – شبكة العقول</h1></header>
+<header>
+  <div class="logo">MG</div>
+  <h1>MindGrid – شبكة العقول</h1>
+</header>
 
 <main>
-  <!-- 1) اختيار/إدارة المستخدمين -->
+  <!-- اختيار/إدارة المستخدمين -->
   <section id="userSelect" class="screen active">
     <div class="card">
-      <div class="row" style="justify-content:space-between">
+      <div class="row space-between">
         <h2 class="title">اختر مستخدمًا أو أضف جديدًا</h2>
         <button class="btn-primary" onclick="showScreen('addUser')">إضافة مستخدم</button>
       </div>
@@ -73,15 +27,12 @@ button,.btn{cursor:pointer}
     </div>
   </section>
 
-  <!-- 2) إضافة مستخدم جديد (منفصلة) -->
+  <!-- إضافة مستخدم -->
   <section id="addUser" class="screen">
     <div class="card">
       <h2 class="title">مستخدم جديد</h2>
       <div class="grid-2">
-        <div>
-          <label>الاسم</label>
-          <input id="name" class="input" type="text" placeholder="اكتب اسمك">
-        </div>
+        <div><label>الاسم</label><input id="name" class="input" type="text" placeholder="اكتب اسمك"></div>
         <div>
           <label>الدولة</label>
           <input id="countryInput" class="input" list="countryList" placeholder="اختر الدولة">
@@ -93,14 +44,14 @@ button,.btn{cursor:pointer}
           <div class="help">سنحسب العمر تلقائيًا من تاريخ الميلاد.</div>
         </div>
       </div>
-      <div class="row" style="justify-content:flex-end;margin-top:12px">
+      <div class="row end mt8">
         <button class="btn" onclick="showScreen('userSelect')">رجوع</button>
         <button class="btn-primary" onclick="goPrefs()">التالي</button>
       </div>
     </div>
   </section>
 
-  <!-- 3) التفضيلات (منفصلة) -->
+  <!-- التفضيلات -->
   <section id="prefs" class="screen">
     <div class="card">
       <h2 class="title">التفضيلات</h2>
@@ -118,14 +69,14 @@ button,.btn{cursor:pointer}
           </select>
         </div>
       </div>
-      <div class="row" style="justify-content:flex-end;margin-top:12px">
+      <div class="row end mt8">
         <button class="btn" onclick="showScreen('userSelect')">إلغاء</button>
         <button class="btn-primary" onclick="saveUser()">حفظ وإنهاء</button>
       </div>
     </div>
   </section>
 
-  <!-- 4) قائمة الألعاب -->
+  <!-- قائمة الألعاب -->
   <section id="games" class="screen">
     <div class="card">
       <h2 class="title">اختر اللعبة</h2>
@@ -138,343 +89,74 @@ button,.btn{cursor:pointer}
         <button class="btn" onclick="showQuiz()">📚 اختبار المعلومات</button>
         <button class="btn" onclick="showImage()">🖼️ تحدي الصور</button>
       </div>
-      <div class="row" style="margin-top:12px">
+      <div class="row mt8">
         <button class="btn" onclick="showScreen('userSelect')">تبديل المستخدم</button>
       </div>
     </div>
   </section>
 
-  <!-- ——— الكلمات المتقاطعة (9×9 أبيض/أسود + قوائم أسئلة) ——— -->
+  <!-- ZenFlow Crossword -->
   <section id="scrCrossword" class="screen">
     <div class="card">
-      <h2 class="title" id="cwTitle">كلمات متقاطعة (9×9)</h2>
-      <div class="cw-wrap">
-        <div>
-          <div class="cw-grid" id="cwGrid"></div>
-          <div class="row" style="margin-top:10px;justify-content:center;gap:8px">
-            <button class="btn" onclick="showScreen('games')">رجوع</button>
-            <button class="btn-primary" onclick="checkCrossword()">تحقق</button>
-            <span id="cwMsg" class="help"></span>
+      <div class="cw-topbar">
+        <div class="mode-switch">
+          <button id="btn9" class="active" onclick="loadCrosswordMode('standard')">9×9</button>
+          <button id="btn5" onclick="loadCrosswordMode('mini')">5×5</button>
+        </div>
+        <div class="badges">
+          <span class="badge">⏱ <span id="timer">00:00</span></span>
+          <span class="badge">🪙 <span id="coins">5</span></span>
+        </div>
+      </div>
+
+      <h2 class="title" id="cwTitle">كلمات متقاطعة</h2>
+
+      <div id="cwGrid" class="cw-grid"></div>
+
+      <div class="row center mt8">
+        <button class="btn" onclick="toggleDir()">تبديل الاتجاه ↕︎</button>
+        <button class="btn" onclick="checkLetter()">تحقق (حرف)</button>
+        <button class="btn" onclick="checkWord()">تحقق (كلمة)</button>
+        <button class="btn-primary" onclick="checkGrid()">تحقق (شبكة)</button>
+      </div>
+
+      <div class="row center mt8">
+        <button id="pencilBtn" class="btn" onclick="togglePencil()">✎ وضع الرصاص</button>
+        <button class="btn" onclick="revealLetter()">كشف حرف (🪙1)</button>
+        <button class="btn" onclick="showScreen('games')">رجوع</button>
+      </div>
+
+      <div class="dock">
+        <div class="dock-card">
+          <div class="tabs">
+            <div id="tabAcross" class="tab active" onclick="switchClueTab('across')">أفقي</div>
+            <div id="tabDown" class="tab" onclick="switchClueTab('down')">عمودي</div>
+          </div>
+          <ol id="cwAcross" class="clue-list"></ol>
+          <ol id="cwDown" class="clue-list" style="display:none"></ol>
+          <div class="navbar">
+            <button class="btn" onclick="prevClue()">◀︎ السابق</button>
+            <button class="btn" onclick="nextClue()">التالي ▶︎</button>
           </div>
         </div>
-        <div class="card" style="min-width:260px;max-width:360px">
-          <h3 style="margin-top:0">أفقي</h3>
-          <ol id="cwAcross"></ol>
-          <h3>عمودي</h3>
-          <ol id="cwDown"></ol>
-        </div>
       </div>
     </div>
   </section>
 
-  <!-- ——— ألغاز منطقية ——— -->
-  <section id="scrLogic" class="screen">
-    <div class="card game-card">
-      <h2 class="title">لغز منطقي</h2>
-      <div id="logicQ"></div>
-      <input id="logicA" class="input" placeholder="اكتب الإجابة">
-      <div class="row" style="margin-top:8px">
-        <button class="btn" onclick="showScreen('games')">رجوع</button>
-        <button class="btn-primary" onclick="checkLogic()">تحقق</button>
-        <span id="logicMsg" class="help"></span>
-      </div>
-    </div>
-  </section>
+  <!-- بقية الألعاب (بسيطة) -->
+  <section id="scrLogic" class="screen"><div class="card game-card"><h2 class="title">لغز منطقي</h2><div id="logicQ"></div><input id="logicA" class="input" placeholder="اكتب الإجابة"><div class="row mt8"><button class="btn" onclick="showScreen('games')">رجوع</button><button class="btn-primary" onclick="checkLogic()">تحقق</button><span id="logicMsg" class="help"></span></div></div></section>
 
-  <!-- ——— كلمة السر / Wordsearch ——— -->
-  <section id="scrWordsearch" class="screen">
-    <div class="card game-card">
-      <h2 class="title">كلمة السر</h2>
-      <div id="wsGrid" class="wordsearch"></div>
-      <div id="wsWords" class="row" style="margin-top:8px"></div>
-      <div class="row" style="margin-top:8px">
-        <button class="btn" onclick="showScreen('games')">رجوع</button>
-      </div>
-    </div>
-  </section>
+  <section id="scrWordsearch" class="screen"><div class="card game-card"><h2 class="title">كلمة السر</h2><div id="wsGrid" class="wordsearch"></div><div id="wsWords" class="row mt8"></div><div class="row mt8"><button class="btn" onclick="showScreen('games')">رجوع</button></div></div></section>
 
-  <!-- ——— ترتيب الحروف ——— -->
-  <section id="scrAnagram" class="screen">
-    <div class="card game-card">
-      <h2 class="title">ترتيب الحروف</h2>
-      <div id="anaLetters" class="row"></div>
-      <input id="anaInput" class="input" placeholder="الكلمة الصحيحة">
-      <div class="row" style="margin-top:8px">
-        <button class="btn" onclick="showScreen('games')">رجوع</button>
-        <button class="btn-primary" onclick="checkAnagram()">تحقق</button>
-        <span id="anaMsg" class="help"></span>
-      </div>
-    </div>
-  </section>
+  <section id="scrAnagram" class="screen"><div class="card game-card"><h2 class="title">ترتيب الحروف</h2><div id="anaLetters" class="row"></div><input id="anaInput" class="input" placeholder="الكلمة الصحيحة"><div class="row mt8"><button class="btn" onclick="showScreen('games')">رجوع</button><button class="btn-primary" onclick="checkAnagram()">تحقق</button><span id="anaMsg" class="help"></span></div></div></section>
 
-  <!-- ——— تحدي السرعة ——— -->
-  <section id="scrSpeed" class="screen">
-    <div class="card game-card">
-      <h2 class="title">تحدي السرعة</h2>
-      <div class="row">
-        <button class="btn-primary" onclick="startSpeed()">ابدأ</button>
-        <div>الوقت: <span id="spdTime">30</span> ثانية • النقاط: <span id="spdScore">0</span></div>
-      </div>
-      <div id="spdQ" style="margin-top:10px"></div>
-      <input id="spdA" class="input" placeholder="الإجابة">
-      <div class="row" style="margin-top:8px">
-        <button class="btn" onclick="showScreen('games')">إنهاء</button>
-        <button class="btn" onclick="checkSpeed()">تحقق</button>
-      </div>
-    </div>
-  </section>
+  <section id="scrSpeed" class="screen"><div class="card game-card"><h2 class="title">تحدي السرعة</h2><div class="row"><button class="btn-primary" onclick="startSpeed()">ابدأ</button><div>الوقت: <span id="spdTime">30</span> • النقاط: <span id="spdScore">0</span></div></div><div id="spdQ" class="mt8"></div><input id="spdA" class="input" placeholder="الإجابة"><div class="row mt8"><button class="btn" onclick="showScreen('games')">إنهاء</button><button class="btn" onclick="checkSpeed()">تحقق</button></div></div></section>
 
-  <!-- ——— اختبار معلومات ——— -->
-  <section id="scrQuiz" class="screen">
-    <div class="card game-card">
-      <h2 class="title">اختبار معلومات</h2>
-      <div id="quizQ"></div>
-      <div id="quizOptions"></div>
-      <div class="row" style="margin-top:8px">
-        <button class="btn" onclick="showScreen('games')">رجوع</button>
-      </div>
-    </div>
-  </section>
+  <section id="scrQuiz" class="screen"><div class="card game-card"><h2 class="title">اختبار معلومات</h2><div id="quizQ"></div><div id="quizOptions"></div><div class="row mt8"><button class="btn" onclick="showScreen('games')">رجوع</button></div></div></section>
 
-  <!-- ——— تحدي الصور ——— -->
-  <section id="scrImage" class="screen">
-    <div class="card game-card">
-      <h2 class="title">تحدي الصور</h2>
-      <img id="imgPic" src="" alt="" style="max-width:100%;border-radius:12px;border:1px solid var(--line)">
-      <input id="imgA" class="input" placeholder="ما الموجود في الصورة؟" style="margin-top:8px">
-      <div class="row" style="margin-top:8px">
-        <button class="btn" onclick="showScreen('games')">رجوع</button>
-        <button class="btn-primary" onclick="checkImage()">تحقق</button>
-        <span id="imgMsg" class="help"></span>
-      </div>
-    </div>
-  </section>
+  <section id="scrImage" class="screen"><div class="card game-card"><h2 class="title">تحدي الصور</h2><img id="imgPic" src="" alt="" class="img"><input id="imgA" class="input mt8" placeholder="ما الموجود في الصورة؟"><div class="row mt8"><button class="btn" onclick="showScreen('games')">رجوع</button><button class="btn-primary" onclick="checkImage()">تحقق</button><span id="imgMsg" class="help"></span></div></div></section>
 </main>
 
-<script>
-let users = JSON.parse(localStorage.getItem('mg_users')||'[]');
-let activeId = localStorage.getItem('mg_active')||null;
-
-let puzzles = {};
-let countries = [];
-
-const $ = s => document.querySelector(s);
-const $$ = s => Array.from(document.querySelectorAll(s));
-function uid(){ return 'u_'+Math.random().toString(36).slice(2,9); }
-function showScreen(id){ $$('.screen').forEach(s=>s.classList.remove('active')); $('#'+id).classList.add('active'); }
-function computeAge(dob){ if(!dob) return 0; const d=new Date(dob), n=new Date(); let a=n.getFullYear()-d.getFullYear(); const m=n.getMonth()-d.getMonth(); if(m<0||(m===0&&n.getDate()<d.getDate())) a--; return Math.max(0,a); }
-
-function renderUsers(){
-  const box = $('#userList');
-  box.innerHTML = users.map(u=>`
-    <div class="card">
-      <div class="row" style="justify-content:space-between;align-items:center">
-        <div>
-          <div style="font-weight:800">${u.name||"بدون اسم"}</div>
-          <div class="help">${u.country||"—"} • ${u.age?u.age+" سنة":"—"} • ${u.difficulty||"—"}</div>
-        </div>
-        <div class="row">
-          <button class="btn-primary" onclick="enterAs('${u.id}')">دخول</button>
-          <button class="btn" onclick="delUser('${u.id}')">حذف</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-function enterAs(id){ activeId=id; localStorage.setItem('mg_active',id); showScreen('games'); }
-function delUser(id){ users=users.filter(u=>u.id!==id); localStorage.setItem('mg_users',JSON.stringify(users)); renderUsers(); }
-
-function goPrefs(){ showScreen('prefs'); buildTopics(); }
-const ALL_TOPICS=["ألغاز ذكاء","ثقافة عامة","تاريخ","جغرافيا","علوم","تكنولوجيا","رياضة","فن","موسيقى","أدب","أفلام ومسلسلات","أعمال","طعام","سفر","طبيعة"];
-function buildTopics(){
-  const host = $('#topics'); host.innerHTML='';
-  ALL_TOPICS.forEach(t=>{ const b=document.createElement('div'); b.className='pill'; b.textContent=t; b.onclick=()=>b.classList.toggle('active'); host.appendChild(b); });
-}
-function saveUser(){
-  const name=$('#name').value.trim();
-  const country=$('#countryInput').value.trim();
-  const dob=$('#dob').value; const age=computeAge(dob);
-  const difficulty=$('#difficulty').value;
-  const topics=Array.from($('#topics').querySelectorAll('.pill.active')).map(x=>x.textContent);
-  const u={id:uid(),name,country,dob,age,difficulty,topics,games:{}};
-  users.push(u); localStorage.setItem('mg_users',JSON.stringify(users)); renderUsers(); showScreen('userSelect');
-}
-
-/* تحميل البيانات */
-fetch('puzzles.json').then(r=>r.json()).then(d=>puzzles=d||{});
-fetch('countries.json').then(r=>r.json()).then(list=>{
-  countries=list||[]; const dl=$('#countryList'); dl.innerHTML=countries.map(c=>`<option value="${c}">`).join('');
-});
-
-/* ——— الكلمات المتقاطعة (9×9 + قوائم أسئلة) ——— */
-let cwSolution=[];
-function showCrossword(){
-  const p = puzzles.crossword && puzzles.crossword[0];
-  if(!p){ alert('لا توجد شبكة متقاطعة'); return; }
-
-  $('#cwTitle').textContent = p.title || 'كلمات متقاطعة (9×9)';
-  cwSolution = (p.solution || []).map(r => r.split(''));
-
-  const grid = $('#cwGrid'); grid.innerHTML = '';
-
-  // خريطة أرقام بدايات الكلمات حسب clues
-  const numMap = new Map(); // "r,c" -> num
-  (p.clues?.across || []).forEach(c => numMap.set(`${c.row},${c.col}`, c.num));
-  (p.clues?.down   || []).forEach(c => {
-    if(!numMap.has(`${c.row},${c.col}`)) numMap.set(`${c.row},${c.col}`, c.num);
-  });
-
-  for(let r=0;r<9;r++){
-    for(let c=0;c<9;c++){
-      const sol = cwSolution[r]?.[c] || '#';
-      const cell = document.createElement('div');
-
-      if(sol === '#'){
-        cell.className = 'cw-cell cw-black';
-        cell.setAttribute('tabindex','-1');
-        grid.appendChild(cell);
-        continue;
-      }
-
-      cell.className = 'cw-cell';
-
-      const inp = document.createElement('input');
-      inp.className = 'cw-input'; inp.maxLength = 1;
-      inp.autocomplete='off'; inp.autocapitalize='none'; inp.spellcheck=false; inp.inputMode='text';
-
-      inp.addEventListener('input', e=>{
-        e.target.value = e.target.value.replace(/\s/g,'');
-        const next = cell.nextElementSibling;
-        if(e.target.value && next){
-          const ni = next.querySelector('input'); if(ni) ni.focus();
-        }
-      });
-      inp.addEventListener('keydown', e=>{
-        if(e.key === 'Backspace' && !e.target.value){
-          const prev = cell.previousElementSibling;
-          if(prev){ const pi = prev.querySelector('input'); if(pi){ pi.focus(); pi.value=''; } }
-        }
-      });
-
-      const num = numMap.get(`${r},${c}`);
-      if(num){
-        const s = document.createElement('span');
-        s.className = 'cw-num'; s.textContent = num;
-        cell.appendChild(s);
-      }
-
-      cell.appendChild(inp);
-      grid.appendChild(cell);
-    }
-  }
-
-  // قوائم الأسئلة
-  const acrossBox = document.getElementById('cwAcross');
-  acrossBox.innerHTML = (p.clues?.across || []).map(it => `<li><b>${it.num}</b> — ${it.clue} (${it.answer.length})</li>`).join('');
-  const downBox = document.getElementById('cwDown');
-  downBox.innerHTML   = (p.clues?.down   || []).map(it => `<li><b>${it.num}</b> — ${it.clue} (${it.answer.length})</li>`).join('');
-
-  showScreen('scrCrossword');
-}
-function norm(s){return s.replace(/\s/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').toUpperCase();}
-function checkCrossword(){
-  const inputs = Array.from(document.querySelectorAll('#cwGrid .cw-input'));
-  let ok = true; let k = 0;
-  for(let r=0;r<9;r++){
-    for(let c=0;c<9;c++){
-      const sol = cwSolution[r]?.[c] || '#';
-      if(sol === '#') continue;
-      const cell = inputs[k]?.closest('.cw-cell');
-      const v = norm(inputs[k]?.value || '');
-      const g = norm(sol);
-      if(v === g){ cell.classList.remove('cw-wrong'); cell.classList.add('cw-correct'); }
-      else { ok = false; cell.classList.remove('cw-correct'); cell.classList.add('cw-wrong'); }
-      k++;
-    }
-  }
-  document.getElementById('cwMsg').textContent = ok ? 'أحسنت! الشبكة مطابقة.' : 'بعض الخانات غير صحيحة.';
-}
-
-/* ——— بقية الألعاب ——— */
-function showLogic(){
-  const q = puzzles.logic?.[0]; if(!q){ alert('لا توجد ألغاز منطقية'); return; }
-  $('#logicQ').textContent = q.question; $('#logicA').value=''; $('#logicMsg').textContent='';
-  showScreen('scrLogic');
-}
-function checkLogic(){
-  const q = puzzles.logic?.[0]; const a = $('#logicA').value.trim();
-  $('#logicMsg').textContent = norm(a)===norm(q.answer) ? 'صحيح ✅' : 'غير صحيح ❌';
-}
-
-function showWordsearch(){
-  const w = puzzles.wordsearch?.[0]; if(!w){ alert('لا توجد بيانات كلمة السر'); return; }
-  const host=$('#wsGrid'); host.innerHTML='';
-  w.grid.forEach(row=>row.forEach(ch=>{
-    const d=document.createElement('div'); d.className='wcell'; d.textContent=ch; host.appendChild(d);
-  }));
-  const wordsBox=$('#wsWords'); wordsBox.innerHTML='';
-  w.words.forEach(word=>{
-    const b=document.createElement('button'); b.className='btn'; b.textContent=word;
-    b.onclick=()=> b.classList.toggle('btn-primary');
-    wordsBox.appendChild(b);
-  });
-  showScreen('scrWordsearch');
-}
-
-function showAnagram(){
-  const a = puzzles.anagram?.[0]; if(!a){ alert('لا توجد ألغاز ترتيب'); return; }
-  const host=$('#anaLetters'); host.innerHTML='';
-  a.letters.forEach(ch=>{ const b=document.createElement('button'); b.className='btn'; b.textContent=ch; host.appendChild(b); });
-  $('#anaInput').value=''; $('#anaMsg').textContent=''; showScreen('scrAnagram');
-}
-function checkAnagram(){
-  const a = puzzles.anagram?.[0]; const v=$('#anaInput').value.trim();
-  $('#anaMsg').textContent = norm(v)===norm(a.answer) ? 'صحيح ✅' : 'غير صحيح ❌';
-}
-
-let spdT=0, spdIdx=0, spdTimer=null, spdScore=0;
-function showSpeed(){ $('#spdTime').textContent='30'; $('#spdScore').textContent='0'; $('#spdQ').textContent=''; $('#spdA').value=''; showScreen('scrSpeed'); }
-function startSpeed(){
-  if(!puzzles.speed?.length){ alert('لا توجد أسئلة سرعة'); return; }
-  spdIdx=0; spdScore=0; spdT=30; $('#spdTime').textContent=spdT; nextSpdQ();
-  clearInterval(spdTimer); spdTimer=setInterval(()=>{ spdT--; $('#spdTime').textContent=spdT; if(spdT<=0){ clearInterval(spdTimer); } },1000);
-}
-function nextSpdQ(){ const q = puzzles.speed?.[spdIdx%puzzles.speed.length]; $('#spdQ').textContent=q.question; $('#spdA').value=''; }
-function checkSpeed(){
-  if(spdT<=0) return;
-  const q = puzzles.speed?.[spdIdx%puzzles.speed.length]; const v=$('#spdA').value.trim();
-  if(norm(v)===norm(q.answer)){ spdScore++; $('#spdScore').textContent=spdScore; }
-  spdIdx++; nextSpdQ();
-}
-
-function showQuiz(){
-  const q = puzzles.quiz?.[0]; if(!q){ alert('لا توجد أسئلة'); return; }
-  $('#quizQ').textContent=q.question; const box=$('#quizOptions'); box.innerHTML='';
-  q.options.forEach(opt=>{
-    const div=document.createElement('div'); div.className='option'; div.textContent=opt;
-    div.onclick=()=>{ box.querySelectorAll('.option').forEach(o=>o.classList.remove('correct','wrong'));
-      div.classList.add( norm(opt)===norm(q.answer) ? 'correct':'wrong' );
-    };
-    box.appendChild(div);
-  });
-  showScreen('scrQuiz');
-}
-
-function showImage(){
-  const p = puzzles.image?.[0]; if(!p){ alert('لا توجد صور'); return; }
-  $('#imgPic').src = p.image || 'assets/placeholder.jpg';
-  $('#imgA').value=''; $('#imgMsg').textContent=''; showScreen('scrImage');
-}
-function checkImage(){
-  const p = puzzles.image?.[0]; const v=$('#imgA').value.trim();
-  $('#imgMsg').textContent = norm(v)===norm(p.answer) ? 'صحيح ✅' : 'غير صحيح ❌';
-}
-
-/* تشغيل أولي */
-renderUsers();
-
-/* Service Worker */
-if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js'); }
-</script>
+<script src="app.js"></script>
 </body>
 </html>
