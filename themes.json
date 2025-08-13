@@ -1,0 +1,149 @@
+{
+  "default_theme_id": "sky_cyan",
+  "themes": [
+    {
+      "id": "sky_cyan",
+      "name_ar": "سماوي MindGrid",
+      "name_en": "Sky Cyan",
+      "vars": {
+        "--primary": "#00bcd4",
+        "--bg": "#0b1117",
+        "--fg": "#eaf6fb",
+        "--card": "rgba(255,255,255,.06)",
+        "--line": "rgba(255,255,255,.12)",
+        "--muted": "rgba(255,255,255,.75)",
+        "--ink": "#000000",
+        "--paper": "#ffffff",
+        "--focus": "#00bcd4",
+        "--correct": "#e8ffe8",
+        "--wrong": "#ffeaea"
+      }
+    },
+    {
+      "id": "newspaper_white",
+      "name_ar": "صحيفة كلاسيكية",
+      "name_en": "Classic Newspaper",
+      "vars": {
+        "--primary": "#0d47a1",
+        "--bg": "#f5f5f0",
+        "--fg": "#1a1a1a",
+        "--card": "#ffffff",
+        "--line": "#dddddd",
+        "--muted": "#666666",
+        "--ink": "#000000",
+        "--paper": "#ffffff",
+        "--focus": "#1565c0",
+        "--correct": "#dff6df",
+        "--wrong": "#f9dddd"
+      }
+    },
+    {
+      "id": "sepia_paper",
+      "name_ar": "ورق سيبيا",
+      "name_en": "Sepia Paper",
+      "vars": {
+        "--primary": "#d4883f",
+        "--bg": "#f3e7d3",
+        "--fg": "#2b2114",
+        "--card": "rgba(0,0,0,.04)",
+        "--line": "rgba(0,0,0,.12)",
+        "--muted": "rgba(0,0,0,.55)",
+        "--ink": "#1b1209",
+        "--paper": "#fff8e8",
+        "--focus": "#c97a35",
+        "--correct": "#e7fbdb",
+        "--wrong": "#ffe1d7"
+      }
+    },
+    {
+      "id": "midnight_neon",
+      "name_ar": "ليل نيوني",
+      "name_en": "Midnight Neon",
+      "vars": {
+        "--primary": "#00ffd1",
+        "--bg": "#0a0b12",
+        "--fg": "#e9fbff",
+        "--card": "rgba(255,255,255,.05)",
+        "--line": "rgba(255,255,255,.10)",
+        "--muted": "rgba(255,255,255,.75)",
+        "--ink": "#000000",
+        "--paper": "#ffffff",
+        "--focus": "#00ffd1",
+        "--correct": "#dbffe9",
+        "--wrong": "#ffd9e0"
+      }
+    },
+    {
+      "id": "desert_dunes",
+      "name_ar": "كُثبان الصحراء",
+      "name_en": "Desert Dunes",
+      "vars": {
+        "--primary": "#d4a373",
+        "--bg": "#20160f",
+        "--fg": "#fbe9d6",
+        "--card": "rgba(255,255,255,.05)",
+        "--line": "rgba(255,255,255,.10)",
+        "--muted": "rgba(255,255,255,.75)",
+        "--ink": "#2a1b12",
+        "--paper": "#fffdf7",
+        "--focus": "#e0b184",
+        "--correct": "#e9ffe3",
+        "--wrong": "#ffe5dc"
+      }
+    },
+    {
+      "id": "forest_mint",
+      "name_ar": "غابة النعناع",
+      "name_en": "Forest Mint",
+      "vars": {
+        "--primary": "#2ecc71",
+        "--bg": "#0f1a12",
+        "--fg": "#e9fff1",
+        "--card": "rgba(255,255,255,.05)",
+        "--line": "rgba(255,255,255,.10)",
+        "--muted": "rgba(255,255,255,.7)",
+        "--ink": "#092010",
+        "--paper": "#ffffff",
+        "--focus": "#2ecc71",
+        "--correct": "#dffbe9",
+        "--wrong": "#ffe2e2"
+      }
+    },
+    {
+      "id": "royal_purple",
+      "name_ar": "أرجواني ملكي",
+      "name_en": "Royal Purple",
+      "vars": {
+        "--primary": "#8e44ad",
+        "--bg": "#0e0a12",
+        "--fg": "#f3ecff",
+        "--card": "rgba(255,255,255,.06)",
+        "--line": "rgba(255,255,255,.12)",
+        "--muted": "rgba(255,255,255,.75)",
+        "--ink": "#160a1c",
+        "--paper": "#ffffff",
+        "--focus": "#9b59b6",
+        "--correct": "#e8ffe8",
+        "--wrong": "#ffe1ef"
+      }
+    },
+    {
+      "id": "high_contrast",
+      "name_ar": "تباين عالٍ (إتاحة)",
+      "name_en": "High Contrast (A11y)",
+      "vars": {
+        "--primary": "#ffcc00",
+        "--bg": "#000000",
+        "--fg": "#ffffff",
+        "--card": "rgba(255,255,255,.08)",
+        "--line": "rgba(255,255,255,.28)",
+        "--muted": "rgba(255,255,255,.85)",
+        "--ink": "#000000",
+        "--paper": "#ffffff",
+        "--focus": "#ffcc00",
+        "--correct": "#d6ffd6",
+        "--wrong": "#ffd6d6"
+      }
+    }
+  ]
+}
