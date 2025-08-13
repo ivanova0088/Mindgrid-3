@@ -13,8 +13,8 @@
   --card:rgba(255,255,255,.06); --line:rgba(255,255,255,.12);
   --muted:rgba(255,255,255,.7);
 }
-/* إطار عام */
-*{box-sizing:border-box} body{margin:0;font-family:-apple-system,system-ui,"Noto Sans Arabic",Arial,sans-serif;background:linear-gradient(180deg,#0b1218,#0a0f14);color:var(--fg)}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,system-ui,"Noto Sans Arabic",Arial,sans-serif;background:linear-gradient(180deg,#0b1218,#0a0f14);color:var(--fg)}
 header{position:sticky;top:0;z-index:5;padding:14px 16px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.35);backdrop-filter:blur(6px);display:flex;gap:10px;align-items:center}
 .logo{width:36px;height:36px;border-radius:10px;background:#00bcd4;color:#00181e;display:grid;place-items:center;font-weight:900}
 h1{margin:0;font-size:18px}
@@ -31,20 +31,21 @@ button,.btn{cursor:pointer}
 .btn-ghost{background:transparent}
 .title{margin:0 0 10px 0;font-size:18px}
 .help{font-size:12px;color:var(--muted)}
-.screen{display:none} .active{display:block}
+.screen{display:none}.active{display:block}
 
 /* حبوب المجالات */
 .pills{display:flex;flex-wrap:wrap;gap:10px}
 .pill{padding:10px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);cursor:pointer;user-select:none}
 .pill.active{background:#00bcd4;color:#00232b;border:none;font-weight:800}
 
-/* ——— الكلمات المتقاطعة: أبيض/أسود ——— */
-.cw-panel{display:flex;gap:12px;justify-content:center;margin-bottom:8px;flex-wrap:wrap}
+/* ——— الكلمات المتقاطعة: أبيض/أسود + ترقيم + قوائم أسئلة ——— */
+.cw-wrap{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
 .cw-grid{display:grid;grid-template-columns:repeat(9,42px);gap:6px;justify-content:center}
-.cw-cell{width:42px;height:42px;border:2px solid #000;background:#fff;display:grid;place-items:center;border-radius:4px}
+.cw-cell{position:relative;width:42px;height:42px;border:2px solid #000;background:#fff;display:grid;place-items:center;border-radius:4px}
 .cw-input{width:100%;height:100%;border:none;background:transparent;text-align:center;font-weight:800;font-size:18px;color:#000;outline:none}
 .cw-input:focus{outline:2px solid #00bcd4;outline-offset:-2px}
 .cw-black{background:#000;border-color:#000}
+.cw-num{position:absolute;top:2px;right:3px;font-size:10px;color:#444}
 .cw-correct{background:#e8ffe8}
 .cw-wrong{background:#ffeaea}
 
@@ -58,9 +59,7 @@ button,.btn{cursor:pointer}
 </style>
 </head>
 <body>
-<header>
-  <div class="logo">MG</div><h1>MindGrid – شبكة العقول</h1>
-</header>
+<header><div class="logo">MG</div><h1>MindGrid – شبكة العقول</h1></header>
 
 <main>
   <!-- 1) اختيار/إدارة المستخدمين -->
@@ -145,16 +144,26 @@ button,.btn{cursor:pointer}
     </div>
   </section>
 
-  <!-- ——— الكلمات المتقاطعة (9×9 أبيض/أسود) ——— -->
+  <!-- ——— الكلمات المتقاطعة (9×9 أبيض/أسود + قوائم أسئلة) ——— -->
   <section id="scrCrossword" class="screen">
     <div class="card">
       <h2 class="title" id="cwTitle">كلمات متقاطعة (9×9)</h2>
-      <div class="cw-panel">
-        <button class="btn" onclick="showScreen('games')">رجوع</button>
-        <button class="btn-primary" onclick="checkCrossword()">تحقق</button>
-        <span id="cwMsg" class="help"></span>
+      <div class="cw-wrap">
+        <div>
+          <div class="cw-grid" id="cwGrid"></div>
+          <div class="row" style="margin-top:10px;justify-content:center;gap:8px">
+            <button class="btn" onclick="showScreen('games')">رجوع</button>
+            <button class="btn-primary" onclick="checkCrossword()">تحقق</button>
+            <span id="cwMsg" class="help"></span>
+          </div>
+        </div>
+        <div class="card" style="min-width:260px;max-width:360px">
+          <h3 style="margin-top:0">أفقي</h3>
+          <ol id="cwAcross"></ol>
+          <h3>عمودي</h3>
+          <ol id="cwDown"></ol>
+        </div>
       </div>
-      <div class="cw-grid" id="cwGrid"></div>
     </div>
   </section>
 
@@ -243,22 +252,18 @@ button,.btn{cursor:pointer}
 </main>
 
 <script>
-/* بيانات المستخدمين */
 let users = JSON.parse(localStorage.getItem('mg_users')||'[]');
 let activeId = localStorage.getItem('mg_active')||null;
 
-/* البيانات */
 let puzzles = {};
 let countries = [];
 
-/* أدوات */
-const $ = sel => document.querySelector(sel);
-const $$ = sel => Array.from(document.querySelectorAll(sel));
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
 function uid(){ return 'u_'+Math.random().toString(36).slice(2,9); }
 function showScreen(id){ $$('.screen').forEach(s=>s.classList.remove('active')); $('#'+id).classList.add('active'); }
 function computeAge(dob){ if(!dob) return 0; const d=new Date(dob), n=new Date(); let a=n.getFullYear()-d.getFullYear(); const m=n.getMonth()-d.getMonth(); if(m<0||(m===0&&n.getDate()<d.getDate())) a--; return Math.max(0,a); }
 
-/* صفحة اختيار المستخدم */
 function renderUsers(){
   const box = $('#userList');
   box.innerHTML = users.map(u=>`
@@ -279,7 +284,6 @@ function renderUsers(){
 function enterAs(id){ activeId=id; localStorage.setItem('mg_active',id); showScreen('games'); }
 function delUser(id){ users=users.filter(u=>u.id!==id); localStorage.setItem('mg_users',JSON.stringify(users)); renderUsers(); }
 
-/* إضافة مستخدم ثم الانتقال للتفضيلات */
 function goPrefs(){ showScreen('prefs'); buildTopics(); }
 const ALL_TOPICS=["ألغاز ذكاء","ثقافة عامة","تاريخ","جغرافيا","علوم","تكنولوجيا","رياضة","فن","موسيقى","أدب","أفلام ومسلسلات","أعمال","طعام","سفر","طبيعة"];
 function buildTopics(){
@@ -302,60 +306,96 @@ fetch('countries.json').then(r=>r.json()).then(list=>{
   countries=list||[]; const dl=$('#countryList'); dl.innerHTML=countries.map(c=>`<option value="${c}">`).join('');
 });
 
-/* ——— الكلمات المتقاطعة (9×9) ——— */
+/* ——— الكلمات المتقاطعة (9×9 + قوائم أسئلة) ——— */
 let cwSolution=[];
 function showCrossword(){
-  const c = puzzles.crossword && puzzles.crossword[0];
-  $('#cwTitle').textContent = c?.title || 'كلمات متقاطعة (9×9)';
-  const grid = $('#cwGrid'); grid.innerHTML='';
-  cwSolution = (c?.solution || []).map(r=>r.split(''));
+  const p = puzzles.crossword && puzzles.crossword[0];
+  if(!p){ alert('لا توجد شبكة متقاطعة'); return; }
+
+  $('#cwTitle').textContent = p.title || 'كلمات متقاطعة (9×9)';
+  cwSolution = (p.solution || []).map(r => r.split(''));
+
+  const grid = $('#cwGrid'); grid.innerHTML = '';
+
+  // خريطة أرقام بدايات الكلمات حسب clues
+  const numMap = new Map(); // "r,c" -> num
+  (p.clues?.across || []).forEach(c => numMap.set(`${c.row},${c.col}`, c.num));
+  (p.clues?.down   || []).forEach(c => {
+    if(!numMap.has(`${c.row},${c.col}`)) numMap.set(`${c.row},${c.col}`, c.num);
+  });
 
   for(let r=0;r<9;r++){
-    for(let col=0;col<9;col++){
-      const sol = cwSolution[r]?.[col] || '#';
+    for(let c=0;c<9;c++){
+      const sol = cwSolution[r]?.[c] || '#';
       const cell = document.createElement('div');
-      if(sol==='#'){ cell.className='cw-cell cw-black'; grid.appendChild(cell); continue; }
-      cell.className='cw-cell';
+
+      if(sol === '#'){
+        cell.className = 'cw-cell cw-black';
+        cell.setAttribute('tabindex','-1');
+        grid.appendChild(cell);
+        continue;
+      }
+
+      cell.className = 'cw-cell';
+
       const inp = document.createElement('input');
-      inp.className='cw-input'; inp.maxLength=1; inp.autocomplete='off'; inp.spellcheck=false; inp.autocapitalize='none';
-      inp.addEventListener('input',e=>{
-        e.target.value=e.target.value.replace(/\s/g,'');
-        // انتقال تلقائي:
+      inp.className = 'cw-input'; inp.maxLength = 1;
+      inp.autocomplete='off'; inp.autocapitalize='none'; inp.spellcheck=false; inp.inputMode='text';
+
+      inp.addEventListener('input', e=>{
+        e.target.value = e.target.value.replace(/\s/g,'');
         const next = cell.nextElementSibling;
-        if(e.target.value && next){ const ni=next.querySelector('input'); if(ni) ni.focus(); }
-      });
-      inp.addEventListener('keydown',e=>{
-        if(e.key==='Backspace' && !e.target.value){
-          // رجوع تلقائي
-          let prev = cell.previousElementSibling;
-          if(prev){ const pi=prev.querySelector('input'); if(pi){ pi.focus(); pi.value=''; } }
+        if(e.target.value && next){
+          const ni = next.querySelector('input'); if(ni) ni.focus();
         }
       });
-      cell.appendChild(inp); grid.appendChild(cell);
+      inp.addEventListener('keydown', e=>{
+        if(e.key === 'Backspace' && !e.target.value){
+          const prev = cell.previousElementSibling;
+          if(prev){ const pi = prev.querySelector('input'); if(pi){ pi.focus(); pi.value=''; } }
+        }
+      });
+
+      const num = numMap.get(`${r},${c}`);
+      if(num){
+        const s = document.createElement('span');
+        s.className = 'cw-num'; s.textContent = num;
+        cell.appendChild(s);
+      }
+
+      cell.appendChild(inp);
+      grid.appendChild(cell);
     }
   }
+
+  // قوائم الأسئلة
+  const acrossBox = document.getElementById('cwAcross');
+  acrossBox.innerHTML = (p.clues?.across || []).map(it => `<li><b>${it.num}</b> — ${it.clue} (${it.answer.length})</li>`).join('');
+  const downBox = document.getElementById('cwDown');
+  downBox.innerHTML   = (p.clues?.down   || []).map(it => `<li><b>${it.num}</b> — ${it.clue} (${it.answer.length})</li>`).join('');
+
   showScreen('scrCrossword');
 }
 function norm(s){return s.replace(/\s/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').toUpperCase();}
 function checkCrossword(){
-  const inputs = Array.from($('#cwGrid').querySelectorAll('.cw-input'));
-  let ok=true; let k=0;
+  const inputs = Array.from(document.querySelectorAll('#cwGrid .cw-input'));
+  let ok = true; let k = 0;
   for(let r=0;r<9;r++){
     for(let c=0;c<9;c++){
-      const sol=cwSolution[r]?.[c]||'#';
-      if(sol==='#') continue;
+      const sol = cwSolution[r]?.[c] || '#';
+      if(sol === '#') continue;
       const cell = inputs[k]?.closest('.cw-cell');
-      const val = norm(inputs[k]?.value||'');
-      const good = norm(sol||'');
-      if(val===good){ cell.classList.remove('cw-wrong'); cell.classList.add('cw-correct'); }
-      else{ ok=false; cell.classList.remove('cw-correct'); cell.classList.add('cw-wrong'); }
+      const v = norm(inputs[k]?.value || '');
+      const g = norm(sol);
+      if(v === g){ cell.classList.remove('cw-wrong'); cell.classList.add('cw-correct'); }
+      else { ok = false; cell.classList.remove('cw-correct'); cell.classList.add('cw-wrong'); }
       k++;
     }
   }
-  $('#cwMsg').textContent = ok ? 'أحسنت! الشبكة مطابقة.' : 'بعض الخانات غير صحيحة.';
+  document.getElementById('cwMsg').textContent = ok ? 'أحسنت! الشبكة مطابقة.' : 'بعض الخانات غير صحيحة.';
 }
 
-/* ——— منطق ——— */
+/* ——— بقية الألعاب ——— */
 function showLogic(){
   const q = puzzles.logic?.[0]; if(!q){ alert('لا توجد ألغاز منطقية'); return; }
   $('#logicQ').textContent = q.question; $('#logicA').value=''; $('#logicMsg').textContent='';
@@ -366,25 +406,21 @@ function checkLogic(){
   $('#logicMsg').textContent = norm(a)===norm(q.answer) ? 'صحيح ✅' : 'غير صحيح ❌';
 }
 
-/* ——— كلمة السر / Wordsearch ——— */
 function showWordsearch(){
   const w = puzzles.wordsearch?.[0]; if(!w){ alert('لا توجد بيانات كلمة السر'); return; }
   const host=$('#wsGrid'); host.innerHTML='';
-  w.grid.forEach(row=>{
-    row.forEach(ch=>{
-      const d=document.createElement('div'); d.className='wcell'; d.textContent=ch; host.appendChild(d);
-    });
-  });
+  w.grid.forEach(row=>row.forEach(ch=>{
+    const d=document.createElement('div'); d.className='wcell'; d.textContent=ch; host.appendChild(d);
+  }));
   const wordsBox=$('#wsWords'); wordsBox.innerHTML='';
   w.words.forEach(word=>{
     const b=document.createElement('button'); b.className='btn'; b.textContent=word;
-    b.onclick=()=>{ b.classList.toggle('btn-primary'); };
+    b.onclick=()=> b.classList.toggle('btn-primary');
     wordsBox.appendChild(b);
   });
   showScreen('scrWordsearch');
 }
 
-/* ——— ترتيب الحروف ——— */
 function showAnagram(){
   const a = puzzles.anagram?.[0]; if(!a){ alert('لا توجد ألغاز ترتيب'); return; }
   const host=$('#anaLetters'); host.innerHTML='';
@@ -396,16 +432,14 @@ function checkAnagram(){
   $('#anaMsg').textContent = norm(v)===norm(a.answer) ? 'صحيح ✅' : 'غير صحيح ❌';
 }
 
-/* ——— تحدي السرعة ——— */
 let spdT=0, spdIdx=0, spdTimer=null, spdScore=0;
 function showSpeed(){ $('#spdTime').textContent='30'; $('#spdScore').textContent='0'; $('#spdQ').textContent=''; $('#spdA').value=''; showScreen('scrSpeed'); }
 function startSpeed(){
+  if(!puzzles.speed?.length){ alert('لا توجد أسئلة سرعة'); return; }
   spdIdx=0; spdScore=0; spdT=30; $('#spdTime').textContent=spdT; nextSpdQ();
   clearInterval(spdTimer); spdTimer=setInterval(()=>{ spdT--; $('#spdTime').textContent=spdT; if(spdT<=0){ clearInterval(spdTimer); } },1000);
 }
-function nextSpdQ(){
-  const q = puzzles.speed?.[spdIdx%puzzles.speed.length]; $('#spdQ').textContent=q.question; $('#spdA').value='';
-}
+function nextSpdQ(){ const q = puzzles.speed?.[spdIdx%puzzles.speed.length]; $('#spdQ').textContent=q.question; $('#spdA').value=''; }
 function checkSpeed(){
   if(spdT<=0) return;
   const q = puzzles.speed?.[spdIdx%puzzles.speed.length]; const v=$('#spdA').value.trim();
@@ -413,7 +447,6 @@ function checkSpeed(){
   spdIdx++; nextSpdQ();
 }
 
-/* ——— اختبار معلومات ——— */
 function showQuiz(){
   const q = puzzles.quiz?.[0]; if(!q){ alert('لا توجد أسئلة'); return; }
   $('#quizQ').textContent=q.question; const box=$('#quizOptions'); box.innerHTML='';
@@ -427,7 +460,6 @@ function showQuiz(){
   showScreen('scrQuiz');
 }
 
-/* ——— تحدي الصور ——— */
 function showImage(){
   const p = puzzles.image?.[0]; if(!p){ alert('لا توجد صور'); return; }
   $('#imgPic').src = p.image || 'assets/placeholder.jpg';
