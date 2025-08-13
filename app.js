@@ -321,3 +321,32 @@ function buyStreakShield(){
     return true;
   } return false;
 }
+/* ===== Themes (خفيف) ===== */
+let themes = [], currentThemeId = null;
+
+fetch('themes.json')
+  .then(r=>r.json())
+  .then(t=>{
+    themes = t.themes||[];
+    const saved = localStorage.getItem('mg_theme') || t.default_theme_id || (themes[0]?.id);
+    applyTheme(saved);
+  })
+  .catch(()=>{ /* إبقاء الثيم الافتراضي من CSS لو فشل التحميل */ });
+
+function applyTheme(id){
+  const th = themes.find(x=>x.id===id); if(!th) return;
+  currentThemeId = id;
+  const root = document.documentElement;
+  Object.entries(th.vars).forEach(([k,v])=> root.style.setProperty(k, v));
+  localStorage.setItem('mg_theme', id);
+}
+
+function cycleTheme(){
+  if(!themes.length) return;
+  const idx = themes.findIndex(t=>t.id===currentThemeId);
+  const next = themes[(idx+1)%themes.length];
+  applyTheme(next.id);
+  // تحديث بسيط بصريًا (اختياري): وميض صغير على العنوان
+  const h = document.querySelector('header h1');
+  if(h){ h.style.transition='filter .2s'; h.style.filter='brightness(1.4)'; setTimeout(()=>h.style.filter='', 220); }
+}
