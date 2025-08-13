@@ -292,3 +292,32 @@ function checkImage(){ const p=puzzles.image?.[0]; const v=$('#imgA').value.trim
 /* ===== Boot ===== */
 renderUsers();
 if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js'); } // إن وجد sw.js
+// محفظة
+function getWallet(){ return JSON.parse(localStorage.getItem('mg_wallet')||'{"coins":0,"gems":0}'); }
+function setWallet(w){ localStorage.setItem('mg_wallet', JSON.stringify(w)); }
+function addCoins(n){ const w=getWallet(); w.coins+=n; setWallet(w); }
+function spendCoins(n){ const w=getWallet(); if(w.coins<n) return false; w.coins-=n; setWallet(w); return true; }
+function addGems(n){ const w=getWallet(); w.gems+=n; setWallet(w); }
+function spendGems(n){ const w=getWallet(); if(w.gems<n) return false; w.gems-=n; setWallet(w); return true; }
+
+// جائزة نهاية لغز
+function rewardOnComplete({mode="9x9", timeSec=0, hints=0}){
+  let base = mode==="mini"? 20 : 50;
+  if(timeSec < 90) base += 10;
+  if(hints===0) base += 10;
+  addCoins(base);
+}
+
+// درع السلسلة
+function useStreakShield(){
+  const inv = JSON.parse(localStorage.getItem('mg_inv')||'{"shields":0}');
+  if(inv.shields>0){ inv.shields--; localStorage.setItem('mg_inv', JSON.stringify(inv)); return true; }
+  return false;
+}
+function buyStreakShield(){
+  if(spendGems(1) || spendCoins(40)){
+    const inv = JSON.parse(localStorage.getItem('mg_inv')||'{"shields":0}');
+    inv.shields++; localStorage.setItem('mg_inv', JSON.stringify(inv));
+    return true;
+  } return false;
+}
